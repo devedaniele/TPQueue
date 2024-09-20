@@ -19,7 +19,7 @@
             TPQueue(){
                 stop = false;
 
-                changeTPSize(1);
+                tpsize = 0;
             }
             TPQueue(int size){
                 stop = false;
