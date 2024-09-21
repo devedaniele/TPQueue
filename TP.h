@@ -70,7 +70,7 @@
 
             void enqueue(function<void()> task){
                 unique_lock<mutex> lock(locker);
-                tasks.emplace(task);
+                tasks.emplace(move(task));
                 lock.unlock();
 
                 signal.notify_one();
