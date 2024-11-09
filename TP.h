@@ -8,8 +8,6 @@
     #include <queue>
     #include <vector>
 
-    //max thread size = thread::hardware_concurrency()
-
     using namespace std;
 
     class TPQueue{
@@ -28,6 +26,9 @@
             }
 
             void changeTPSize(int size){
+                if (!(0 <= size <= thread::hardware_concurrency()))
+                    return;
+
                 int i;
 
                 if (size < tpsize){
@@ -35,9 +36,14 @@
                     tpsize = size;
                     size = i;
 
-                    for (i = 0;i < size;i++){
-                        workers.pop_back();
-                    }
+                    // for (i = 0;i < size;i++){
+                    //     auto worker = move(workers.back());
+
+                    //     if (worker.joinable())
+                    //         worker.join();
+                        
+                    //     // workers.pop_back();
+                    // }
 
                     return;
                 }
@@ -84,7 +90,8 @@
                 signal.notify_all();
 
                 for (thread& worker : workers)
-                    worker.join();
+                    if (worker.joinable())
+                        worker.join();
             }
 
         private:
